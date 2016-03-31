@@ -1,5 +1,4 @@
 vendor/*
-OPSystem/Conf/config.php
-OPSystem/Runtime/*
-!OPSystem/Runtime
-OPSystem/Runtime/Logs/*
+/OPSystem/Conf/config.php
+/OPSystem/Runtime/*
+!/OPSystem/Runtime
