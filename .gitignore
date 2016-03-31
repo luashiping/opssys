@@ -1,3 +1,4 @@
 vendor/*
-/OPSystem/Conf/config.php
-Runtime/
+OPSystem/Conf/config.php
+OPSystem/Runtime/Cache/*
+OPSystem/Runtime/Logs/*
