@@ -1,0 +1,50 @@
+
+    <head>
+        <meta content="text/html; charset=utf8" http-equiv="Content-Type">
+        <title>容器列表</title>
+        <link href="__TMPL__Public/style/style.css" rel="stylesheet" type="text/css"></link>
+        <load href="__TMPL__/Public/Js/Jquery/jquery.js" />
+        
+    </head>
+    <body id="page">
+    <div>
+        <h1 class="tops">主机详情</h1>
+    </div>
+    <div>
+        <ui>
+            <li>
+                <span style="display:inline-block">App name:</span>
+                <span>{$container_info.App_Name}</span>
+            </li>
+            <li>
+                <span style="display:inline-block">Node:</span>
+                <span>{$container_info.Node_Name}</span>
+            </li>
+            <li>
+                <span style="display:inline-block">Node ip:</span>
+                <span>{$container_info.Node_Ip}</span>
+            </li>
+            <li>
+                <span style="display:inline-block">创建时间:</span>
+                <span>{$container_info.create_time}</span>
+            </li>
+            <!--li>
+                <span style="display:inline-block">Cpu:</span>
+                <span></span>
+            </li>-->
+            <li>
+                <span style="display:inline-block">Memory:</span>
+                <span>{$container_info.Memory}MB</span>
+            </li>
+            
+            <li>
+                <span style="display:inline-block">服务地址:</span>
+                <empty name="container_info.ports">null<else />
+                    <volist name="container_info.ports" id="pinfo">
+                        <span>{$pinfo.HostPort}->{$pinfo.Port}</span>&nbsp&nbsp
+                    </volist>
+                </empty>
+            </li>  
+        </ui>
+    </div>
+    </body>

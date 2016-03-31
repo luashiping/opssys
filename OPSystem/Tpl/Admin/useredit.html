@@ -1,0 +1,73 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf8" />
+<title>系统用户添加</title>
+<link href="__TMPL__Public/style/style.css" rel="stylesheet" type="text/css" />
+	<load href="__TMPL__/Public/Js/Jquery/jquery.js" />
+    <load href="__TMPL__/Public/Js/Jquery/jquery.form.js" />
+</head>
+<body id="page">
+<script>
+$(function(){
+	$('#useredit').ajaxForm({
+		success:       complete,  // post-submit callback
+		dataType: 'json'
+	});
+
+
+    function complete(data){
+        if (data.status==1)
+        {
+            $('#result').html(data.info).show();
+            // 更新列表
+            //data = data.data;
+            //window.location.href=data.url;
+        }else{
+            $('#result').html(data.info).show();
+        }
+    }
+
+});
+</script>
+	<form action="{:U("Admin/usersave")}" method="POST" id="useredit">
+        <input type="hidden" value="{$user.Id}" name="Id">
+        <table width="900">
+            <tr><td colspan=2 align="center"><div id="result"></div></td></tr>
+            <tr>
+                <td width="200" class="border_ltb">用户角色</td>
+                <td width="570" class="border_lrtb">
+					&nbsp;<input type="text" value="{$user.Role}" maxlength="16" size="20" name="Role"></input></td>
+            </tr>
+            <tr>
+                <td width="200" class="border_ltb">用户名</td>
+                <td width="570" class="border_lrtb">
+                    &nbsp;<input type="text" value="{$user.Username}" maxlength="16" size="20" name="Username">
+                </td>
+            </tr>
+			<tr>
+                <td width="200" class="border_ltb">密码</td>
+                <td width="570" class="border_lrtb">
+                    &nbsp;<input type="password" value="{$user.Password}" maxlength="16" size="20" name="Password">
+                </td>
+            </tr>
+			<tr>
+                <td width="200" class="border_ltb">确认密码</td>
+                <td width="570" class="border_lrtb">
+                    &nbsp;<input type="password" value="{$server.w_ip}" maxlength="16" size="20" name="cPassword">
+                </td>
+            </tr>
+            <!--tr>
+                <td width="200" class="border_ltb">用户权限</td>
+                <td width="570" class="border_lrtb">
+                    &nbsp;<input type="text" value="{$server.dir}" maxlength="16" size="20" name="dir">
+                </td>
+            </tr>-->
+            <tr>
+                <td><input type="hidden" value="1" name="ajax"></td>
+                <td width="200" class="border_ltb"><input type="submit" value="保存" name="save" class="bt"></td>
+            </tr>
+        </table>
+    </form>
+</body>
+</html>

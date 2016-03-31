@@ -1,0 +1,91 @@
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta content="text/html; charset=utf8" http-equiv="Content-Type">
+        <title>构建列表</title>
+        <link type="text/css" rel="stylesheet" href="__TMPL__Public/style/style.css"></link>
+        <load href="__TMPL__/Public/Js/Jquery/jquery.js" />
+    </head>
+    <body id="page">
+        <script>
+            function git_commit(id) {
+                window.open("http://192.168.2.223/root/gtobal/commit/"+id);     
+            }
+            
+            function deploy(image_id){
+                action = confirm("确认部署吗?");
+                if (action != "0")
+                {
+                    loadImgHtml='<img src="/OPSystem/Tpl/Public/images/loading.gif" style="vertical-align:-9px;margin-left:10px;" id="imgLoad"/>';
+                    $("#p_status").html(loadImgHtml);
+                    $.get("{:U('Code/deploy')}",
+					{
+						image_id:image_id
+					},
+					function(data) {
+						if(data.status==1){
+							$("#p_status").html(data.info);
+						}else{
+                            $("#p_status").html(data.info);
+						}
+					});
+                }
+            }
+
+            function online(){
+                action = confirm("确认上线吗?请谨慎操作");
+                if (action != "0")
+                {
+					$.get("{:U('Code/online')}",
+					{
+						//id:id,
+						//dbserver:dbserver
+					},
+					function(data) {
+						if(data.status==1){
+                            $("#p_status").html(data.info);
+						}else{
+							alert(data.info);
+						}
+					});
+                }
+            }
+
+        </script>
+        <style type="text/css">
+            #b_commit{
+                cursor:pointer;
+                
+            }
+            #b_commit:hover{ text-decoration:underline;}
+        </style>
+     
+		<table width="100%" cellspacing="0" cellpadding="0" border="0">
+            <tr><td colspan="9"><div id="result" align="center"></div></td></tr>
+            <tr>    
+                <th width="10%">build id</th>
+                <th width="10%">image id</th>
+                <th width="10%">commit</th>
+                <th width="10%">publish status</th>
+                <th width="10%">action</th>
+            </tr>
+            <volist name="current_status" id="current">  
+                <tr>
+                    <td>{$current.build_id}</td>
+                    <td>{$current.image_id|substr=0,12}</td>	
+                    <td id="b_commit" onclick="git_commit('{$current.commit}')">{$current.commit|substr=0,8}</td>
+                    <if condition="$current.publish_status eq 0">
+                        <td id="p_status"><span style="color:red;">待部署</span></td>
+                    <elseif condition="$current.publish_status eq 1"/>
+                        <td id="p_status"><span style="color:green;">已部署</span></td>
+                    <elseif condition="$current.publish_status eq 2"/>
+                        <td id="p_status"><span style="color:blue;">已上线</span></td>
+                    </if>
+                    <td>
+                        <a href="javascript:void(0)" style="cursor:pointer" onclick="deploy('{$current.image_id}')">部署</a>&nbsp;
+						<a href="javascript:void(0)" style="cursor:pointer" onclick="online()">上线</a>&nbsp;
+                    </td>
+                </tr>
+            </volist>
+        </table>
+    </body>
+</html>

@@ -1,0 +1,22 @@
+<!--
+To change this template, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<html>
+    <head>
+        <title></title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <link type="text/css" rel="stylesheet" href="__TMPL__Public/style/style.css"></link>
+    </head>
+    <body id="page">
+        <form action="http://{:C('PMA_HOST')}/signon.php{$parem}" id="loginForm" method="POST" target="_blank"> 
+            <h2>登陆phpMyadmin</h2>
+            <label for="user"><span>用户名：</span><input id="userName" name="user" type="text" value="{:C('PMA_USER')}"/></label>
+            <label for="password"><span>密码：</span><input id="passWord" name="password" type="password" value=""/></label>
+            <label id="submit"><input name="" type="submit" class="bt" value="登录" /><input name="host" type="hidden" value="localhost" />
+            </label>
+        </form>
+
+    </body>
+</html>

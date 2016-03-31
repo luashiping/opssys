@@ -1,0 +1,195 @@
+<html>
+    <head>
+        <STYLE type="text/css">
+            body {
+                font-family: Verdana,  Arial;
+                text-decoration:none;
+                color: #000000;
+                font-size: 12px;
+            }
+
+            input {
+                font-family: Verdana,  Arial;
+                text-decoration:none;
+                color: #000000;
+                font-size: 12px;
+            }
+
+            table {
+                font-size: 12px;
+            }
+
+            a {
+                text-decoration:none;
+                color: #000000;
+            }
+
+            a:visited {
+                text-decoration: none;
+                color: default;
+            }
+
+            a:hover {
+                color: #FF0000;
+            }
+
+            /* Login page */
+
+            input.name {
+
+                border: 0px solid purple;
+                height: 19px;
+                width:100px;
+                margin:2px 0px 0px 0px;
+                background-color: transparent;
+                cursor:hand;
+                vertical-align: bottom;
+
+            }
+
+            input.directory_location {
+                border: 0px solid purple;
+                height: 19px;
+                width: 300px;
+                margin:3px 0px 0px 0px;
+                vertical-align: bottom;
+                horizontal-align: right;
+                margin-left: 4px;
+                background-color: transparent;
+            }
+
+            td.border_ltb {
+                padding-left: 3px;
+                border-left:   1px solid black;
+                border-top:    1px solid black;
+                border-bottom: 1px solid black;
+            }
+
+            img.icon {
+                width: 16px;
+                height: 16px;
+                border-style: none;
+                border-width: 0px;
+                vertical-align: center;
+                margin-left: 2px;
+            }
+
+            table.header {
+                border-collapse:collapse;
+                background-repeat: repeat-x;
+                background-position: left top;
+                background-image: url(__TMPL__/Public/images/header.png);
+            }
+
+            td.header-left, td.header-right {
+                background-image: url(__TMPL__/Public/images/header_seperator.png);
+                background-repeat: no-repeat;
+                background-position: right top;
+
+            }
+
+            td.header-left {
+                padding-left: 1px;
+                text-align: left;
+            }
+
+            td.header-right {
+                text-align: right;
+                padding-right: 4px;
+            }
+
+            input.description {
+                font-size: 11px;
+                background-color: transparent;
+                cursor:hand;
+                border: 0px solid purple;
+                height: 17px;
+                vertical-align: bottom;
+            }
+
+            td.left, td.right {
+                vertical-align: bottom;
+                background-image: url(__TMPL__/Public/images/header_seperator2.png);
+                background-repeat: no-repeat;
+                background-position: right top;
+                border-top:     #ffffff 1px solid;
+                border-left:    #ffffff 1px solid;
+                border-bottom:  #cccccc 1px solid;
+            }
+
+            td.left {
+                text-align: left bottom;
+                padding: 0px;
+                padding-left: 1px;
+                font-size: 12px;
+            }
+
+            td.right {
+                text-align: right;
+                padding-right: 4px;
+                font-size: 12px;
+            }
+
+            td.last {
+                text-align: left bottom;
+                vertical-align: bottom;
+                background-repeat: no-repeat;
+                background-position: right top;
+                border-top:     #ffffff 1px solid;
+                border-left:    #ffffff 1px solid;
+                border-bottom:  #cccccc 1px solid;
+            }
+        </STYLE>
+    </head>
+    <body>
+        <script>
+            function intodir(path){
+                parent.setpath(path);
+                window.location.href="{:U("Pureftpd/getdir",array('ip'=>'"+parent.getip()+"','path'=>'"+path'))};
+            }
+        </script>
+        <table width="100%" class="header"><tr>
+                <td class="header-left">
+                    <a class="head" href="#">名称</a>
+                </td>
+                <td class="header-right">
+                    <a class="head" href="#">大小</a>
+                </td>
+                <td class="header-left">
+                    <a class="head" href="#">类型</a>
+                </td>
+                <td class="header-left">
+                    <a class="head" href="#">修改日期</a>
+                </td>
+                <td class="header-left">
+                    <a class="head" href="#">拥有者</a>
+                </td>
+                <td class="header-left">
+                    <a class="head" href="#">群组</a>
+                </td>
+                <td class="last-header">
+                    <a class="head" href="#">属性</a>
+                </td>
+            </tr>
+            <if condition="!empty($basedirs)">
+                <volist name="basedirs" id="basedir">
+                    <tr bgcolor="#FFFFFF">
+                        <td title="{$basedir}" style="vertical-align:bottom" class="left"><a onclick="intodir('{:str_replace('/','|',$basedir)}')"><img class="icon" src="__TMPL__/Public/images/icons/map.png" style="margin:0px 0px 2px ; vertical-align:middle"><input type="text" name="textfield" value="{$basedir}" class="description" style="width:170px; margin:0px 3px"></a></td>
+                        <td class="left" colspan="6">&nbsp;</td>
+                    </tr>
+                </volist>
+                <else />
+                <volist name="dirs" id="dir">
+                    <tr bgcolor="#FFFFFF">
+                        <td title="{$dir.Name}" style="vertical-align:bottom" class="left"><a onclick="intodir('{:str_replace('/','|',$dir['Path'])}')"><img class="icon" src="__TMPL__/Public/images/icons/{$dir.Icon}" style="margin:0px 0px 2px ; vertical-align:middle"><input type="text" name="textfield" value="{$dir.Name}" class="description" style="width:170px; margin:0px 3px"></a></td>
+                        <td class="left">&nbsp;</td>
+                        <td title="{$dir.Description}" class="left"><input type="text" name="textfield" value="{$dir.Description}" class="description" style="width:110px;"></td>
+                        <td class="left"><input type="text" name="textfield" value="{$dir.Modify}" class="description" style="width:80px;"></td>
+                        <td title="{$dir.Owner}" class="left"><input type="text" name="textfield" value="{$dir.Owner}" class="description" style="width:55px;"></td>
+                        <td title="{$dir.Group}" class="left"><input type="text" name="textfield" value="{$dir.Group}" class="description" style="width:55px;"></td>
+                        <td class="left"><input type="text" name="textfield" value="{$dir.Permission}" class="description" style="width:70px;"></td>
+                    </tr>
+                </volist>
+            </if>
+        </table>
+    </body></html>

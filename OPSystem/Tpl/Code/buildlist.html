@@ -1,0 +1,61 @@
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta content="text/html; charset=utf8" http-equiv="Content-Type">
+        <title>构建列表</title>
+        <link type="text/css" rel="stylesheet" href="__TMPL__Public/style/style.css"></link>
+        <load href="__TMPL__/Public/Js/Jquery/jquery.js" />
+    </head>
+    <body id="page">
+        <script>
+            function git_commit(id) {
+                window.open("http://192.168.2.223/root/gtobal/commit/"+id);     
+            }
+        </script>
+        <style type="text/css">
+            #b_commit{
+                cursor:pointer;
+                
+            }
+            #b_commit:hover{ text-decoration:underline;}
+        </style>
+        <h2>
+			<div style="float:right;margin-top: -7px">
+				<form style="border:1px solid #ddd;padding:2px;background:#ddd" action="{:U("Code/build")}", method="post" id="SearchformID">
+					<input style="border:none;background:#fff" type="text" name="keyword" value="">
+					<select onchange="with(document.forms[0]){commit_id.value=this.value;}">
+						<option value ="default">代码变更</option>
+                        <volist name="commits" id="commit">
+                            <option value="{$commit.id}">{$commit.short_id}&nbsp &nbsp{$commit.title}</option>
+                        </volist>
+					</select>
+                    <input type="hidden" value="" name="commit_id">
+					<input class="sbtn" type="submit" value="构建"/>
+				</form>
+			</div>
+		</h2>
+        <div id="search">
+		</div>
+		<table width="100%" cellspacing="0" cellpadding="0" border="0">
+            <tr><td colspan="9"><div id="result" align="center"></div></td></tr>
+            <tr>
+                <th width="10%">build status</th>
+                <th width="10%">build id</th>
+                <th width="10%">commit</th>
+				<th width="20%">started_at</th>
+                <th width="20%">author</th>
+                <th width="10%">duration</th>
+            </tr>
+            <volist name="builds" id="build">  
+                <tr>
+                    <td>{$build.build_status}</td>
+					<td>{$build.build_id}</td>
+                    <td id="b_commit" onclick="git_commit('{$build.commit}')">{$build.commit|substr=0,8}</td>
+                    <td>{$build.build_started_at}</td>
+                    <td>{$build.author}</td>
+                    <td>{$build.duration}</td>
+                </tr>
+            </volist>
+            <tr><th colspan="9">{$page}</th></tr>
+        </table>
+    </body>
+</html>

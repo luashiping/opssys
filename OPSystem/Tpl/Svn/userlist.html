@@ -1,0 +1,81 @@
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta content="text/html; charset=utf8" http-equiv="Content-Type">
+        <title>用户列表</title>
+        <link type="text/css" rel="stylesheet" href="__TMPL__Public/style/style.css"></link>
+        <load href="__TMPL__/Public/Js/Jquery/jquery.js" />
+    </head>
+    <body id="page">
+        <script>
+			function del (id,dbserver,obj){
+                action = confirm("删除后无法恢复！确认删除该信息吗？");
+                if (action != "0")
+                {
+					$.get("{:U('Pureftpd/userdel')}",
+					{
+						id:id,
+						dbserver:dbserver
+					},
+					function(data) {
+						if(data.status==1){
+							obj.parents('tr').remove();
+							$('#result').html(data.info).show();
+						}else{
+							alert('删除失败');
+						}
+					});
+                }
+            }
+
+            function clearup(id,all){
+                all=arguments[1]?arguments[1]:false;
+                action = confirm("清除后再无法恢复！确定要删除吗？");
+                if (action != "0")
+                {
+                    if(all){
+                        //window.location.href="{:U("Pureftpd/userdel",array('clearupall'=>'1"'))};
+                    }else{
+                        //window.location.href="{:U("Pureftpd/userdel",array('clearup'=>'1','id'=>'"+id'))};
+                    }
+                }
+            }
+        </script>
+        <h2>
+			<a href="{:U('Pureftpd/useredit',array('dbserver'=>$dbserver))}">添加新用户</a>
+			<div style="float:right;margin-top: -7px">
+				<form style="border:1px solid #ddd;padding:2px;background:#ddd" action="{:U("Pureftpd/userlist",array('dbserver'=>$dbserver))}" method="post" id="SearchformID">
+					<input style="border:none;background:#fff" type="text" name="keyword" value="">
+					<select onchange="with(document.forms[0]){at.value=this.value;}">
+						<option value ="note">备注</option>
+						<option value ="ip">所属服务器</option>
+					</select>
+					<input type="hidden" value="note" name="at">
+					<input class="sbtn" type="submit" value="搜索"/>
+				</form>
+			</div>
+		</h2>
+        <div id="search">
+		</div>
+		<table width="100%" cellspacing="0" cellpadding="0" border="0">
+            <tr><td colspan="9"><div id="result" align="center"></div></td></tr>
+            <tr>
+				<th width="30%">备注</th>
+                <th width="30%">帐号</th>
+                <th width="30%">主目录</th>
+                <th>管理操作</th>
+            </tr>
+            <volist name="users" id="user">  
+                <tr>
+					<td>{$user.note}</td>
+                    <td>{$user.User}</td>
+                    <td>{$user.Dir}</td>
+                    <td>
+						<a href="{:U('Svn/useredit',array('user'=>$user['User']))}">修改</a>&nbsp;
+						<a href="javascript:void(0)" style="cursor:pointer" onclick="del({$user.Id},{$dbserver},$(this))">删除</a>&nbsp;
+					</td>
+                </tr>
+            </volist>
+			<tr><th colspan="9">{$page}</th></tr>
+        </table>
+    </body>
+</html>

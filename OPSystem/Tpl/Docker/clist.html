@@ -1,0 +1,148 @@
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta content="text/html; charset=utf8" http-equiv="Content-Type">
+        <title>构建列表</title>
+        <link type="text/css" rel="stylesheet" href="__TMPL__Public/style/style.css"></link>
+        <load href="__TMPL__/Public/Js/Jquery/jquery.js" />
+        <load href="__TMPL__/Public/Js/msgprocess.js" />
+    </head>
+    <body id="page">
+        <script>
+            function start(id) {
+                if(confirm("确定此操作吗？")) {
+                    $.get("{:U('Docker/start')}",
+                    {
+                        id:id
+                    },
+                    function(data) {
+                        if(data.status==1){
+                            alert(data.info);
+                            //$('#result').html(data.info).show();
+                        }else{
+                            alert('操作失败');
+                        }
+                    });
+              }
+            }
+            
+            function stop(id) {
+                if(confirm("确定此操作吗？")) {
+                    $.get("{:U('Docker/stop')}",
+                    {
+                        id:id
+                    },
+                    function(data) {
+                        if(data.status==1){
+                            alert(data.info);
+                            //$('#result').html(data.info).show();
+                        }else{
+                            alert('操作失败');
+                        }
+                    });
+                 }
+            }
+            
+
+           function del(id,obj) {
+                if(confirm("确定此操作吗？")) {
+                    $.get("{:U('Docker/del')}",
+                    {
+                        id:id
+                    },
+                    function(data) {
+                        if(data.status==1){
+                            obj.parents('tr').remove();
+                            //alert(data.info);
+                            //$('#result').html(data.info).show();
+                        }else{
+                            alert('操作失败');
+                        }
+                    });
+                 }
+            }
+            function dels() {
+                var chk_value =[]; 
+                $('input[name="cid"]:checked').each(function(){ 
+                    chk_value.push($(this).val()); 
+                });
+
+                if (chk_value != "") {
+                    $.get("{:U('Docker/del')}",
+                    {
+                        checkbox:chk_value
+                    },
+                    function(data) {
+                        if(data.status==1){
+                            //obj.parents('tr').remove();
+                            $("input[name='cid']:checked").parents('tr').remove();
+                        }else{
+                            alert('操作失败');
+                        }
+                    });
+                } else {
+                    alert("请选择要删除的数据！");
+                }
+            }
+
+            function CheckAll(form){
+                var ifcheck = null;
+                for (var i=0;i<form.elements.length;i++){
+                    var e = form.elements[i];
+                    if(e.type=='checkbox'){
+                        if (ifcheck === null) ifcheck = !e.checked;
+                        e.checked = ifcheck;
+                        if (typeof e.onclick == 'function') e.onclick();
+                    }
+                }
+                return ifcheck;
+            }
+
+        </script>
+        <style type="text/css">
+      
+        </style>
+        
+        <form id="listForm" name="listForm" method="post" action="">
+            <h2>
+                <a onclick="CheckAll(document.listForm)" href="javascript:void(0);">全选</a>
+                <a onclick="if(confirm('确认要删除所选吗？')) {dels()};" href="javascript:void(0);">批量彻底删除</a>
+            </h2>
+    		<table width="100%" cellspacing="0" cellpadding="0" border="0">
+                <tr><td colspan="9"><div id="result" align="center"></div></td></tr>
+                <tr>
+                    <th width="5%"></th>
+                    <th width="20%">name</th>
+                    <th width="40%">image</th>
+                    <th width="15%">status</th>
+    				<th width="20%">action</th>
+                
+                </tr>
+                <volist name="containers" id="container">  
+                    <tr>
+                        <td><input name="cid" type="checkbox" value="{$container.Id}" /></td>
+                        <td><a href="{:U('Docker/detail',array('id'=>$container['Id']))}">{$container.Names.0}</a></td>
+    					<td>{$container.Image}</td>
+                        <td>
+                            <if condition="$container.Zt eq 1">
+                                <span class="label label-success">运行中</span>
+                            <else />
+                                <span class="label label-danger">已停止</span>
+                            </if>
+                        </td>
+                        <td>
+                            <if condition="$container.Zt eq 1">
+                                <a class="btn default disabled">启动</a>
+                                <a class="btn default" onclick="stop('{$container.Id}')">停止</a>
+                            <else />
+                                <a class="btn default" onclick="start('{$container.Id}')">启动</a>
+                                <a class="btn default disabled">停止</a>
+                            </if>
+                            <a class="btn default" onclick="del('{$container.Id}',$(this))">删除</a>
+                       </td>
+                    </tr>
+                </volist>
+                <tr><th colspan="9">{$page}</th></tr>
+            </table>
+        </form>
+    </body>
+</html>

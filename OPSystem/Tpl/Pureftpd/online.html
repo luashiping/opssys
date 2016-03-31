@@ -1,0 +1,46 @@
+<!--
+To change this template, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>在线用户</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <meta http-equiv="refresh" content="5">
+        <link href="__TMPL__/Public/style/style.css" rel="stylesheet" type="text/css" />
+    </head>
+    <body id="page">
+        <table>
+            <tr>
+                <td>PID</td>
+                <td>帐户</td>
+                <td>在线时长(秒)</td>
+                <td>当前状态</td>
+                <td>操作文件</td>
+                <td>来源IP</td>
+                <td>服务器IP</td>
+                <td>服务器端口</td>
+                <td>操作进度(KB)</td>
+            </tr>
+            <if condition="empty($error)">
+                <volist name="onlines" id="online">
+                    <tr>
+                        <td>{$online.0}</td>
+                        <td>{$online.1}</td>
+                        <td>{$online.2}</td>
+                        <td>{$online.3}</td>
+                        <td>{$online.4}</td>
+                        <td><a target="_blank" href="http://www.ip138.com/ips.asp?ip={$online.5}&action=2">{$online.5}</a></td>
+                        <td>{$online.6}</td>
+                        <td>{$online.7}</td>
+                        <td>{$online.8}KB/{$online.9}KB&nbsp;&nbsp;({$online.10}%&nbsp;-&nbsp;{$online.11}KB/s)</td>
+                    </tr>
+                </volist>
+            <else />
+            <tr><td colspan="9" align="center">{$error}</td></tr>
+            </if>
+            <tr><td colspan="9" align="right"><input type="button" value="返回" onclick="history.go(-1)" class="bt"></td></tr>
+        </table>
+    </body>
+</html>

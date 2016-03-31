@@ -1,0 +1,7 @@
+{
+"require": {
+	"m4tthumphrey/php-gitlab-api": "dev-master",
+	"stage1/docker-php": "@dev",
+	"neilime/php-gitlab-ci-sdk": "dev-master"
+	}
+}

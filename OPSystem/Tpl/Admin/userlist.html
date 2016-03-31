@@ -1,0 +1,37 @@
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta content="text/html; charset=utf8" http-equiv="Content-Type">
+        <title>系统用户列表</title>
+        <link type="text/css" rel="stylesheet" href="__TMPL__Public/style/style.css"></link>
+	<script>
+		function del(id){
+			action = confirm("删除后无法恢复！确认删除该信息吗？");
+			if (action != "0")
+			{
+				window.location.href="{:U('Admin/userdel')}"+"?id="+id;
+			}
+		}
+	</script>
+</head>
+
+<body id="page">
+
+    <h2><a href="{:U("Admin/useredit")}">添加新用户</a></h2>
+    <table width="100%" cellspacing="0" cellpadding="0" border="0" id="tableInfo">
+        <tr>
+            <th>用户名</th>
+			<th>用户角色</th>
+			<th>管理操作</th>
+        </tr>
+        <volist name="users" id="user">  
+            <tr>
+                <td>{$user.Username}</td>
+				<td>{$user.Role}</td>
+				<td><a href="{:U("Admin/useredit",array('id'=>$user['Id']))}">修改</a>&nbsp;|&nbsp;<a href="javascript:void(0)" onclick="del({$user.Id})" style="cursor:pointer">删除</a></td>
+            </tr>
+        </volist>  
+    </table>
+
+
+
+</body></html>

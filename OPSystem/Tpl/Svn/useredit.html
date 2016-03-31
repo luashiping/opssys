@@ -1,0 +1,145 @@
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta content="text/html; charset=utf8" http-equiv="Content-Type"></meta>
+        <title>添加新用户</title>
+        <link type="text/css" rel="stylesheet" href="__TMPL__Public/style/style.css"></link>
+        <load href="__TMPL__/Public/Js/Jquery/jquery.js" />
+        <load href="__TMPL__/Public/Js/Jquery/jquery.form.js" />
+    </head>
+    <body id="page">
+        <script language="JavaScript">
+			$(function(){
+				$('#useredit').ajaxForm({
+					success:       complete,  // post-submit callback
+					dataType: 'json'
+				});
+
+				function complete(data){
+					if (data.status==1)
+					{
+						$('#result').html(data.info).show();
+						// 更新列表
+						data = data.data;
+						window.location.href=data.url;
+					}else{
+						$('#result').html(data.info).show();
+					}
+				}
+			});
+		function passwdCheck() {
+			var passwd=document.getElementById("p1");
+			var verify_passwd=document.getElementById("p2");
+			alert(passwd.value);
+			return false;
+		}
+
+		function updateinfo(ip){
+			$.post("{:U('Pureftpd/getinfo')}",{'ip':ip},function(data){
+			if (data.status==1)
+				{
+					$('#result').html(data.info).show();
+					initselect($('#select_user'), data.data['u'],'uid');
+					initselect($('#select_group'), data.data['g'],'gid');
+					if($("input[name='Id']").val()==''){
+						$("input[name='Dir']").val('');
+					}
+				}
+			else{
+					$('#result').html(data.info).show();
+					$('#select_user').empty();
+					$('#select_user').append("<option value=''>select_user</option>");
+					$('#select_group').empty();
+					$('#select_group').append("<option value=''>select_group</option>");
+				}
+			//    initSelect($('#select_user'), data['list']);
+			},'json');
+		}
+
+		function initselect(slt, rs,type) {    
+			slt.empty();    
+			if( rs.length > 0 ) {
+				for(var i = 0; i < rs.length; i++) {
+					slt.append("<option value='"+ rs[i][type] +"'>"+ rs[i]['name'] +"</option>");
+				}
+			} 
+			else slt.append("<option value=''>无法获取</option>");
+			}
+
+/*
+function showdir() {
+    dir=document.forms[0].Dir.value.replace(/\//g,'|');
+    $('#dirlist').html('<iframe height="400" width="100%" src="{:U("Pureftpd/getdir",array("ip"=>"\'+document.forms[0].At.value+'","path"=>"'+dir+"))}'">');
+}
+*/
+		function getip(){
+			return document.forms[0].At.value;
+		}
+		function setpath(path){
+			document.forms[0].Dir.value=path.replace(/\|/g,'/');
+		}
+		function mkpasswd(len){
+			metastr = "0123456789./" + "abcdefghijklmnopqrstuvwxyz" + "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+			pass='';
+			while (pass.length < len) {
+				pass += metastr.substr(Math.random()*10000 % (metastr.length),1);
+			}
+			$('#randpass').html(pass);
+			$("input[name='Password']").val(pass);
+			$("input[name='confirm_Password']").val(pass);
+		}
+
+        </script>
+        <form action="{:U("Svn/usersave")}" method="POST" id="useredit">
+            <table width="900">
+                <tr><td colspan=3 align="center"><div id="result"></div></td></tr>
+                    <td width="150" class="border_ltb">帐号</td>
+                    <td width="570" class="border_lrtb">
+                        &nbsp;<input type="text" value="{$user.User}" maxlength="16" size="10" name="User">
+                    </td>
+                    <td class="border_rtb"><table width="100%" cellspacing="0" cellpadding="0" border="0">
+                            <tr><td>&nbsp;启用</td>
+                                <td>
+                            <if condition="$user['Status'] eq 1">
+                                <input type="checkbox" checked value="{$user.Status}" name="Status">&nbsp;&nbsp;
+                                <elseif condition="$user['Status'] == 0 and isset ($user['Status'])" />
+                                <input type="checkbox" value="1" name="Status">&nbsp;&nbsp;
+                                <else />
+                                <input type="checkbox" checked value="1" name="Status">&nbsp;&nbsp;
+                            </if>
+                    </td>
+                    <td valign="bottom">
+                    </td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+    <tr>
+        <td width="150" class="border_ltb">密码</td>
+        <td colspan="2" class="border_lrtb">
+            &nbsp;<input type="password" value="" maxlength="64" size="20" name="Password" id="p1">
+            &nbsp;<input type="button" onclick="mkpasswd(13)" value="随机生成" class="bt">&nbsp;<span id="randpass"></span>
+        </td>
+    </tr>
+    <tr>
+        <td width="150" class="border_ltb">再次确认密码</td>
+        <td colspan="2" class="border_lrtb">
+            &nbsp;<input type="password" value="" maxlength="64" size="20" name="confirm_Password" id="p2">
+        </td>
+    </tr>
+    <tr>
+        <td width="150" class="border_ltb">主目录</td>
+        <td width="570" class="border_ltb">
+            &nbsp;<input value="{$user.Dir}" name="Dir"></td>
+        <td align="right" class="border_rtb">
+            <input type="button" onclick="javascript:showdir();" value="显示目录列表" class="bt"></input>
+        </td>
+    </tr>
+    <tr>
+        <td width="150" class="border_ltb">&nbsp;</td>
+        <td id="dirlist" class="border_rtb" colspan="2" >
+        </td>
+    </tr>
+</table>
+</form>
+</body>
+</html>

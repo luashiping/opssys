@@ -1,0 +1,65 @@
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta content="text/html; charset=utf8" http-equiv="Content-Type"></meta>
+        <title>添加新服务器</title>
+        <link type="text/css" rel="stylesheet" href="__TMPL__Public/style/style.css"></link>
+    <load href="__TMPL__/Public/Js/Jquery/jquery.js" />
+    <load href="__TMPL__/Public/Js/Jquery/jquery.form.js" />
+</head>
+<body id="page">
+    <script>
+            <!--
+    $(function(){
+        $('#serveredit').ajaxForm({
+            success:       complete,  // post-submit callback
+            dataType: 'json'
+        });
+
+    function complete(data){
+        if (data.status==1)
+        {
+            $('#result').html(data.info).show();
+            // 更新列表
+            //data = data.data;
+            //window.location.href=data.url;
+        }else{
+            $('#result').html(data.info).show();
+        }
+    }
+
+});
+    </script>
+    <form action="{:U("Pureftpd/serversave")}" method="POST" id="serveredit">
+          <input type="hidden" value="{$server.id}" name="id">
+        <table width="900">
+            <tr><td colspan=2 align="center"><div id="result"></div></td></tr>
+            <tr>
+                <td width="200" class="border_ltb">服务器角色</td>
+                <td class="border_lrtb"><input type="text" value="{$server.role}" maxlength="16" size="16" name="role"></input></td>
+            </tr>
+            <tr>
+                <td width="200" class="border_ltb">服务器内网IP</td>
+                <td width="570" class="border_lrtb">
+                    &nbsp;<input type="text" value="{$server.ip}" maxlength="16" size="20" name="ip">
+                </td>
+            </tr>
+			<tr>
+                <td width="200" class="border_ltb">服务器FTP连接IP</td>
+                <td width="570" class="border_lrtb">
+                    &nbsp;<input type="text" value="{$server.ftp_ip}" maxlength="16" size="20" name="w_ip">
+                </td>
+            </tr>
+            <tr>
+                <td width="200" class="border_ltb">导出目录（多个用逗号隔开）</td>
+                <td width="570" class="border_lrtb">
+                    &nbsp;<input type="text" value="{$server.dir}" maxlength="30" size="32" name="dir">
+                </td>
+            </tr>
+            <tr>
+                <td><input type="hidden" value="1" name="ajax"></td>
+                <td width="200" class="border_ltb"><input type="submit" value="保存" name="save" class="bt"></td>
+            </tr>
+        </table>
+    </form>
+</body>
+</html>

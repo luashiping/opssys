@@ -1,0 +1,57 @@
+<html>
+    <head>
+        <title>导入用户</title>
+        <link type="text/css" rel="stylesheet" href="__TMPL__Public/style/style.css"></link>
+    <load href="__TMPL__/Public/Js/Jquery/jquery.js" />
+    <load href="__TMPL__/Public/Js/Jquery/jquery.form.js" />
+</head>
+<body id="page">
+    <script language="JavaScript">
+        $(function(){
+            $('#userimport').ajaxForm({
+                success:       complete,  // post-submit callback
+                dataType: 'json'
+            });
+
+            function complete(data){
+                if (data.status==1)
+                {
+                    $('#result').html(data.info).show();
+                    data = data.data;
+                    //window.location.href=data.url;
+                }else{
+                    $('#result').html(data.info).show();
+                }
+            }
+
+        });
+    </script>
+    <form action="{:U("Pureftpd/userimport")}" method="POST" id="userimport">
+          <table width="700">
+            <tr><td colspan=3 align="center"><div id="result"></div><div id="a"></div></td></tr>
+            <tr>
+                <td style="vertical-align:top" width="40" class="border_ltb">puredb文本:</td>
+                <td colspan="2" class="border_lrtb" width="650">
+                    <textarea rows="20" cols="50" name="puredb"></textarea>
+                </td>
+            </tr>
+            <tr>
+                <td width="160" class="border_ltb">所属服务器：</td>
+                <td colspan="2" class="border_lrtb"><select style="width: 100px;" onchange="document.forms[0].serverip.value=this.value;" name="select_server" id="select_server">
+
+                        <option value="">select server</option>
+                        <volist name="servers" id="server">
+                            <option value="{$server.ip}">{$server.role}</option>
+                        </volist>
+                    </select>
+                    <input type="text" name="serverip" value=""></input>
+                </td>
+            </tr>
+            <tr align="right">
+                <td width="160" class="border_rtb"></td>
+                <td colspan="2" class="border_lrtb">
+                    <input type="hidden" name="ajax" value="1"></input><input type="submit" value="导入" class="bt"></input></td>
+            </tr>
+        </table>
+    </form>
+</body></html>
